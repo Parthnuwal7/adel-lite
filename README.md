@@ -19,19 +19,20 @@
 
 ```bash
 pip install adel-lite
-
+```
 ### Development installation
 ```bash
 git clone https://github.com/Parthnuwal7/adel-lite.git
 cd adel-lite
 pip install -e .
-
+```
 ## Quick Start
 ### Basic Usage
 
 ```python
 import pandas as pd
 from adel_lite import schema, profile, map_relationships, build_meta
+```
 ### Load your data
 
 ```python
@@ -49,42 +50,42 @@ orders = pd.DataFrame({
 
 df_list = [customers, orders]
 table_names = ['customers', 'orders']
-
+```
 ### Generate comprehensive analysis
 
 ```python
 schema_result = schema(df_list, table_names)
 profile_result = profile(df_list, table_names)
 relationships_result = map_relationships(df_list, table_names)
-
+```
 ### Build final meta structure
 
 ```python
 meta = build_meta(schema_result, profile_result, relationships_result)
 print(json.dumps(meta, indent=2))
-
+```
 ### Command Line usage
 
 #### Analyze CSV files
 
 ```bash
 adel-lite --input data/*.csv --output schema.json
-
+```
 #### Generate visualization
 
 ```bash
 adel-lite --input *.csv --visualize --output schema.json
-
+```
 #### Export as SQL DDL
 
 ```bash
 adel-lite --input data/*.csv --format ddl --output schema.sql
-
+```
 #### Skip constraint detection for faster processing
 
 ```bash
 adel-lite --input *.csv --no-constraints --output schema.json
-
+```
 ## Core Functions
 
 ### 1. Schema Generation
