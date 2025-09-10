@@ -90,12 +90,12 @@ adel-lite --input *.csv --no-constraints --output schema.json
 
 ### 1. Schema Generation
 
+```python
 from adel_lite import schema
 
 Generate structural schema
 result = schema(df_list, table_names)
-
-text
+```
 
 **Returns:**
 - Table names and column information
@@ -103,14 +103,12 @@ text
 - Nullable flags and positions
 
 ### 2. Data Profiling
-
+```python
 from adel_lite import profile
 
 Generate comprehensive profiles
 result = profile(df_list, table_names)
-
-text
-
+```
 **Returns:**
 - Statistical summaries (min, max, mean, etc.)
 - Uniqueness and null ratios
@@ -118,44 +116,39 @@ text
 - Primary key candidates
 
 ### 3. Relationship Mapping
-
+```python
 from adel_lite import map_relationships
 
 Detect relationships
 result = map_relationships(df_list, table_names, fk_threshold=0.8)
-
-text
-
+```
 **Returns:**
 - Primary key detection
 - Foreign key relationships with confidence scores
 - Composite key candidates
 
 ### 4. Constraint Detection
-
+```python
 from adel_lite import detect_constraints
 
 Find intra-row constraints
 result = detect_constraints(df_list, table_names, threshold=0.95)
-
-text
-
+```
 **Returns:**
 - GT constraints: `A > B`
 - EQ constraints: `A + B = C`
 - Confidence scores
 
 ### 5. Visualization
-
+```python
 from adel_lite import visualize
 
 Generate schema graph
 path = visualize(schema_result, relationships_result, format='png')
-
-text
-
+```
 ### 6. Export
 
+```python
 from adel_lite import export_schema
 
 Export to different formats
@@ -163,10 +156,10 @@ json_content = export_schema(meta, format='json')
 yaml_content = export_schema(meta, format='yaml')
 ddl_content = export_schema(meta, format='ddl')
 
-text
+```
 
 ## Example Output
-
+```json
 {
 "metadata": {
 "generated_at": "2025-09-10T12:42:00",
@@ -199,14 +192,15 @@ text
 }
 ]
 }
-
-text
+```
 
 ## Advanced Usage
 
 ### Custom Thresholds
 
 Adjust detection thresholds
+
+```python
 relationships = map_relationships(
 df_list, table_names,
 fk_threshold=0.9, # Stricter FK detection
@@ -218,10 +212,10 @@ df_list, table_names,
 threshold=0.98 # Very strict constraints
 )
 
-text
+```
 
 ### Sampling and Inspection
-
+```python
 from adel_lite import sample
 
 Get sample data for inspection
@@ -234,13 +228,14 @@ df_list,
 table_names
 )
 
-text
+```
 
 ## Configuration
 
 ### CLI Configuration
 
 Full configuration example
+```bash 
 adel-lite
 --input data/*.csv
 --output analysis.json
@@ -252,16 +247,17 @@ adel-lite
 --fk-threshold 0.8
 --verbose
 
-text
+```
 
 ### Logging
 
+```python
 import logging
 
-Enable debug logging
+#Enable debug logging
 logging.getLogger('adel_lite').setLevel(logging.DEBUG)
 
-text
+```
 
 ## Performance Tips
 
@@ -288,19 +284,6 @@ text
 3. Make changes and add tests
 4. Run tests: `pytest`
 5. Submit a pull request
-
-## Testing
-
-Run all tests
-pytest
-
-Run with coverage
-pytest --cov=adel_lite
-
-Run specific test file
-pytest tests/test_schema.py -v
-
-text
 
 ## License
 
