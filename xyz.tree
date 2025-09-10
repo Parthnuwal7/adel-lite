@@ -1,0 +1,24 @@
+adel_lite/
+├── __init__.py
+├── schema.py
+├── profile.py
+├── map.py
+├── constraints.py
+├── sample.py
+├── visualize.py
+├── export.py
+├── utils.py
+├── meta.py
+└── cli.py
+tests/
+├── __init__.py
+├── test_schema.py
+├── test_profile.py
+├── test_map.py
+├── test_constraints.py
+├── test_utils.py
+└── conftest.py
+setup.py
+pyproject.toml
+README.md
+requirements.txt
