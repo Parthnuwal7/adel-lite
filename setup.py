@@ -3,8 +3,21 @@ from setuptools import setup, find_packages
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-with open("requirements.txt", "r", encoding="utf-8") as fh:
-    requirements = [line.strip() for line in fh if line.strip() and not line.startswith("#")]
+try:
+    with open("requirements.txt", "r", encoding="utf-8") as fh:
+        requirements = [line.strip() for line in fh if line.strip() and not line.startswith("#")]
+except FileNotFoundError:
+    # Fallback to hardcoded requirements
+    requirements = [
+        "pandas>=1.3.0",
+        "numpy>=1.21.0",
+        "pyyaml>=6.0",
+        "networkx>=2.6",
+        "matplotlib>=3.5.0",
+        "graphviz>=0.20.0",
+        "fuzzywuzzy>=0.18.0",
+        "python-levenshtein>=0.12.0",
+    ]
 
 setup(
     name="adel-lite",
