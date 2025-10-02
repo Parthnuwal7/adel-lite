@@ -21,7 +21,7 @@ except FileNotFoundError:
 
 setup(
     name="adel-lite",
-    version="0.1.0",
+    version="0.1.2",
     author="Parth Nuwal",
     author_email="parthnuwal7@gmail.com",
     description="Automated Data Elements Linking - Lite: Schema generation and profiling for Pandas DataFrames",

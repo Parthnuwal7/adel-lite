@@ -253,3 +253,95 @@ def validate_dataframes(df_list: List[pd.DataFrame]) -> bool:
             logger.warning(f"DataFrame at index {i} is empty")
     
     return True
+
+
+def is_surrogate_key(series: pd.Series) -> bool:
+    """
+    Check if a series represents a surrogate key (auto-incrementing integer).
+    
+    Args:
+        series: Pandas Series to check
+        
+    Returns:
+        True if likely a surrogate key, False otherwise
+    """
+    try:
+        # Must be numeric and unique
+        if not pd.api.types.is_numeric_dtype(series) or series.nunique() != len(series.dropna()):
+            return False
+        
+        clean_series = series.dropna().sort_values()
+        if len(clean_series) < 2:
+            return False
+        
+        # Check if it's sequential integers starting from 1 or 0
+        diffs = clean_series.diff().dropna()
+        return all(diffs == 1) and (clean_series.iloc[0] in [0, 1])
+    
+    except Exception:
+        return False
+
+
+def calculate_entropy(series: pd.Series) -> float:
+    """
+    Calculate Shannon entropy of a series.
+    
+    Args:
+        series: Pandas Series to analyze
+        
+    Returns:
+        Shannon entropy value
+    """
+    try:
+        import numpy as np
+        value_counts = series.value_counts()
+        probabilities = value_counts / len(series)
+        entropy = -np.sum(probabilities * np.log2(probabilities))
+        return entropy
+    except Exception:
+        return 0.0
+
+
+def detect_pattern_type(series: pd.Series) -> str:
+    """
+    Detect the pattern type of a series (email, phone, UUID, etc.).
+    
+    Args:
+        series: Pandas Series to analyze
+        
+    Returns:
+        Pattern type string
+    """
+    import re
+    
+    str_series = series.astype(str)
+    
+    # Email pattern
+    email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    if str_series.str.match(email_pattern).sum() / len(str_series) > 0.8:
+        return 'email'
+    
+    # UUID pattern
+    uuid_pattern = r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
+    if str_series.str.match(uuid_pattern, case=False).sum() / len(str_series) > 0.8:
+        return 'uuid'
+    
+    # Phone pattern (simple)
+    phone_pattern = r'^\+?[\d\s\-\(\)]{7,15}$'
+    if str_series.str.match(phone_pattern).sum() / len(str_series) > 0.8:
+        return 'phone'
+    
+    return 'unknown'
+
+
+def calculate_null_ratio(series: pd.Series) -> float:
+    """
+    Calculate the ratio of null values in a series.
+    
+    Args:
+        series: Pandas Series to analyze
+        
+    Returns:
+        Ratio of null values (0.0 to 1.0)
+    """
+    return series.isnull().sum() / len(series) if len(series) > 0 else 0.0

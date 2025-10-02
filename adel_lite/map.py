@@ -196,21 +196,23 @@ def _detect_foreign_keys(
                     # Calculate name similarity for confidence scoring
                     name_sim = name_similarity(fk_col, pk_col)
                     
-                    # Calculate overall confidence
-                    confidence = (coverage_ratio + name_sim) / 2
-                    
-                    fk_info = {
-                        'foreign_table': fk_table,
-                        'foreign_column': fk_col,
-                        'referenced_table': pk_table,
-                        'referenced_column': pk_col,
-                        'coverage_ratio': round(coverage_ratio, 4),
-                        'name_similarity': round(name_sim, 4),
-                        'confidence': round(confidence, 4)
-                    }
-                    
-                    foreign_keys.append(fk_info)
-                    logger.info(f"Found FK: {fk_table}.{fk_col} -> {pk_table}.{pk_col} (confidence: {confidence:.3f})")
+                    # Apply name similarity threshold filter
+                    if name_sim >= name_similarity_threshold:
+                        # Calculate overall confidence
+                        confidence = (coverage_ratio + name_sim) / 2
+                        
+                        fk_info = {
+                            'foreign_table': fk_table,
+                            'foreign_column': fk_col,
+                            'referenced_table': pk_table,
+                            'referenced_column': pk_col,
+                            'coverage_ratio': round(coverage_ratio, 4),
+                            'name_similarity': round(name_sim, 4),
+                            'confidence': round(confidence, 4)
+                        }
+                        
+                        foreign_keys.append(fk_info)
+                        logger.info(f"Found FK: {fk_table}.{fk_col} -> {pk_table}.{pk_col} (confidence: {confidence:.3f})")
     
     # Sort by confidence (highest first)
     foreign_keys.sort(key=lambda x: x['confidence'], reverse=True)
